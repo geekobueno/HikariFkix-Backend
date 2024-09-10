@@ -7,6 +7,11 @@ import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 
 import { handleHomePage } from "../src/controllers/home.controller.js";
+import { handle404 } from "../src/controllers/404.controller.js";
+//import { routeTypes } from "../src/routes/frenchCategory.route.js";
+
+import * as homeInfoController from "../src/controllers/homeInfoFrench.controller.js";
+
 
 dotenv.config()
 
@@ -39,6 +44,12 @@ const cacheMiddleware = (req, res, next) => {
 };
 
 app.get("/", handleHomePage);
+
+app.get("/api/french", cacheMiddleware, async (req, res) => {
+  await homeInfoController.getHomeInfo(req, res);
+});
+
+app.get("*", handle404);
 
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
