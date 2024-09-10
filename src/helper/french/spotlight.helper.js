@@ -1,4 +1,4 @@
-import extractSpotlights from "../extractorsFrench/spotlight.extractor.js";
+import extractSpotlights from "../../extractors/french/spotlight.extractor.js";
 
 export const getSpotlights = async () => {
   try {

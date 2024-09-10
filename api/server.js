@@ -10,7 +10,8 @@ import { handleHomePage } from "../src/controllers/home.controller.js";
 import { handle404 } from "../src/controllers/404.controller.js";
 //import { routeTypes } from "../src/routes/frenchCategory.route.js";
 
-import * as homeInfoController from "../src/controllers/homeInfoFrench.controller.js";
+import * as homeInfoController from "../src/controllers/french/homeInfo.controller.js";
+import * as topVFController from "../src/controllers/french/topVF.controller.js";
 
 
 dotenv.config()
@@ -47,6 +48,10 @@ app.get("/", handleHomePage);
 
 app.get("/api/french", cacheMiddleware, async (req, res) => {
   await homeInfoController.getHomeInfo(req, res);
+});
+
+app.get("/api/french/top-vf", cacheMiddleware, async (req, res) => {
+  await topVFController.getTop(req, res);
 });
 
 app.get("*", handle404);
