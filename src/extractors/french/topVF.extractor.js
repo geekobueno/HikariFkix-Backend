@@ -8,28 +8,29 @@ axios.defaults.baseURL = baseUrl;
 
 async function extractTopVF() {
   try {
-    const resp = await axios.get("/");
+    const resp = await axios.get(`${baseUrl}/`);
+
     const $ = cheerio.load(resp.data);
 
     const data = $(
-      "div.wrap > div.main.center > div#cols.cols.clearfix > div.block-main:nth-child(2)"
+      "div.block-main:eq(1)"
     )
-      .map((index, element) => {
-        const title = $("div.mov.clearfix > a.mov-t.nowrap", element).text().trim();
-        const poster = $("div.mov.clearfix > div.mov-i.img-box.aaa > img", element).attr("src");
-        const href = $(ele).find("div.mov.clearfix > a.mov-t.nowrap").attr("href");
-        const data_id = href.split('/').pop().split('-')[0];
-        const id=formatTitle(title, data_id);
-        const ep = $("div.mov.clearfix > div.mov-i.img-box.aaa > div.mov-m", element).text().trim();
-        const season = $("div.mov.clearfix > div.mov-i.img-box.aaa > div.nbloc1-2 > span.block-sai", element).text().trim();
+    const promises = data.map((index, element) => {
+      const title = $(element).find("div.mov > a.mov-t.nowrap").text().trim();
+      const poster = $(element).find("div.mov > div.mov-i > img").attr("src");
+      const href = $(element).find("div.mov > div.mov-i > div.mov-mask").attr("data-link");
+      const data_id = href.split('/').pop().split('-')[0];
+      const id = formatTitle(title, data_id);
+      const ep = $(element).find("div.mov > div.mov-i > div.mov-m").text().trim();
+      const season = $(element).find("div.mov > div.mov-i > div.nbloc1-2 > span.block-sai").text().trim();
 
-        return {id, data_id, title, poster, ep , season};
-      })
-      .get();
+      return {id, data_id, title, poster, ep , season};
+    }).get();
 
-    return data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
+    const serverData = await Promise.all(promises); // Process all promises
+
+    return JSON.parse(JSON.stringify(serverData, null, 2));  } catch (error) {
+    console.error("Error fetching or writing data:", error);
     throw error;
   }
 }
