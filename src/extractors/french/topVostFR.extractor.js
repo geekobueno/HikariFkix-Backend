@@ -6,13 +6,13 @@ import baseUrl from "../../utils/frenchUrl.js";
 // Set Axios defaults
 axios.defaults.baseURL = baseUrl;
 
-async function extractTopVF() {
+async function extractTopVostFR() {
   try {
     const resp = await axios.get("/");
     const $ = cheerio.load(resp.data);
 
     const data = $(
-      "div.wrap > div.main.center > div#cols.cols.clearfix > div.block-main:nth-child(2)"
+      "div.wrap > div.main.center > div#cols.cols.clearfix > div.block-main:nth-child(1)"
     )
       .map((index, element) => {
         const title = $("div.mov.clearfix > a.mov-t.nowrap", element).text().trim();
@@ -34,4 +34,4 @@ async function extractTopVF() {
   }
 }
 
-export default extractTopVF;
+export default extractTopVostFR;

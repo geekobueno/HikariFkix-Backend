@@ -12,6 +12,7 @@ import { handle404 } from "../src/controllers/404.controller.js";
 
 import * as homeInfoController from "../src/controllers/french/homeInfo.controller.js";
 import * as topVFController from "../src/controllers/french/topVF.controller.js";
+import * as topVostFRController from "../src/controllers/french/topVostFR.controller.js";
 
 
 dotenv.config()
@@ -52,6 +53,10 @@ app.get("/api/french", cacheMiddleware, async (req, res) => {
 
 app.get("/api/french/top-vf", cacheMiddleware, async (req, res) => {
   await topVFController.getTop(req, res);
+});
+
+app.get("/api/french/top-vostfr", cacheMiddleware, async (req, res) => {
+  await topVostFRController.getTop(req, res);
 });
 
 app.get("*", handle404);
