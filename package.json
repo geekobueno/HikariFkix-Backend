@@ -21,9 +21,11 @@
     "axios": "^1.7.7",
     "cheerio": "^1.0.0",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "crypto-js": "^4.2.0",
     "dotenv": "^16.4.5",
     "express": "^3.21.2",
+    "fake-useragent": "^1.0.1",
     "node-cache": "^5.1.2"
   },
   "type": "module",
