@@ -8,10 +8,13 @@ import { dirname, join } from "path";
 
 import { handleHomePage } from "../src/controllers/home.controller.js";
 import { handle404 } from "../src/controllers/404.controller.js";
-import { getTrending } from "../src/scrapers/getTrending.js";
-import { getVideo } from "../src/scrapers/getVideo.js";
-import { getBrowse } from "../src/scrapers/getBrowse.js";
-import { getBrowseVideos } from "../src/scrapers/getBrowseVideos.js";
+import { getTrending } from "../src/hentai_scrapers/getTrending.js";
+import { getVideo } from "../src/hentai_scrapers/getVideo.js";
+import { getBrowse } from "../src/hentai_scrapers/getBrowse.js";
+import { getBrowseVideos } from "../src/hentai_scrapers/getBrowseVideos.js";
+import * as streamController from "../src/controllers/streamInfo.controller.js";
+import * as searchController from "../src/controllers/search.controller.js";
+import * as episodeListController from "../src/controllers/episodeList.controller.js";
 
 dotenv.config()
 
@@ -51,7 +54,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong' });
 });
 
-app.get('/watch/:slug', async (req, res, next) => {
+app.get('/h/watch/:slug', async (req, res, next) => {
   try {
     const { slug } = req.params;
     const jsondata = await getVideo(slug);
@@ -61,7 +64,7 @@ app.get('/watch/:slug', async (req, res, next) => {
   }
 });
 
-app.get('/trending/:time/:page', async (req, res, next) => {
+app.get('/h/trending/:time/:page', async (req, res, next) => {
   try {
     const { time, page } = req.params;
     const jsondata = await getTrending(time, page);
@@ -72,7 +75,7 @@ app.get('/trending/:time/:page', async (req, res, next) => {
   }
 });
 
-app.get('/browse/:type', async (req, res, next) => {
+app.get('/h/browse/:type', async (req, res, next) => {
   try {
     const { type } = req.params;
     const data = await getBrowse();
@@ -88,7 +91,7 @@ app.get('/browse/:type', async (req, res, next) => {
   }
 });
 
-app.get('/tags', async (req, res, next) => {
+app.get('/h/tags', async (req, res, next) => {
   try {
     const data = await getBrowse();
     const jsondata = data.hentai_tags.map((x) => ({ ...x, url: `/tags/${x.text}/0` }));
@@ -98,7 +101,7 @@ app.get('/tags', async (req, res, next) => {
   }
 });
 
-app.get('/:type/:category/:page', async (req, res, next) => {
+app.get('/h/:type/:category/:page', async (req, res, next) => {
   try {
     const { type, category, page } = req.params;
     const data = await getBrowseVideos(type, category, page);
@@ -107,6 +110,18 @@ app.get('/:type/:category/:page', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+app.get("/a/episodes/:id", cacheMiddleware, async (req, res) => {
+  await episodeListController.getEpisodes(req, res);
+});
+
+app.get("/a/stream", async (req, res) => {
+  await streamController.getStreamInfo(req, res);
+});
+
+app.get("/a/search", cacheMiddleware, async (req, res) => {
+  await searchController.search(req, res);
 });
 
 app.get("*", handle404);
