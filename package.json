@@ -4,7 +4,7 @@
   "description": "The backend for the TachiAnime project",
   "main": "server.js",
   "scripts": {
-    "test": "nodemon --exec npm start",
+    "dev": "nodemon --exec npm start",
     "start": "node api/server.js"
   },
   "repository": {
