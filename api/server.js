@@ -57,8 +57,10 @@ app.use((err, req, res, next) => {
 app.get('/h/watch/:slug', async (req, res, next) => {
   try {
     const { slug } = req.params;
-    const jsondata = await getVideo(slug);
-    res.json({ results: jsondata });
+    const formattedSlug = slug.replace(/\s+/g, '-').toLowerCase() + '-1';
+    console.log(formattedSlug)
+    const jsondata = await getVideo(formattedSlug);
+    res.json({success: true, results: jsondata });
   } catch (error) {
     next(error);
   }
