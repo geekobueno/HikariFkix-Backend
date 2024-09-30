@@ -57,7 +57,22 @@ app.use((err, req, res, next) => {
 app.get('/h/watch/:slug', async (req, res, next) => {
   try {
     const { slug } = req.params;
-    const formattedSlug = slug.trim().replace(/\s+/g, '-').toLowerCase() + '-1';
+    const formattedSlug = `${slug.trim().replace(/\s+/g, '-').toLowerCase()}`;
+    console.log(formattedSlug)
+    const jsondata = await getVideo(formattedSlug);
+    res.json({success: true, results: jsondata });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get('/h/watch/:slug/:ep_num', async (req, res, next) => {
+  try {
+    const { slug, ep_num } = req.params;
+    let formattedSlug = `${slug.trim().replace(/\s+/g, '-').toLowerCase()}`;
+    if (ep_num !== '0') {
+      formattedSlug += `-${ep_num}`;
+    }
     console.log(formattedSlug)
     const jsondata = await getVideo(formattedSlug);
     res.json({success: true, results: jsondata });
