@@ -137,7 +137,7 @@ app.get("/a/stream", async (req, res) => {
   await streamController.getStreamInfo(req, res);
 });
 
-app.get("/a/search", cacheMiddleware, async (req, res) => {
+app.get("/a/search", cacheMiddleware, async (req, res) => { // Updated endpoint to accept keyword and ep as query parameters
   await searchController.search(req, res);
 });
 
