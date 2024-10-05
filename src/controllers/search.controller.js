@@ -28,7 +28,7 @@ export const search = async (req, res) => {
       for (const item of data) {
         const normalizedTitle = normalizeString(item.title);
         // Check for a perfect match
-        if (normalizedTitle === keyword && (ep === '0' || item.tvInfo.eps === ep)) { // Check if both title matches and episode matches if ep is not 0
+        if (normalizedTitle === keyword && (ep === '0' || item.tvInfo.eps === ep || item.tvInfo.sub === ep)) { // Check if both title matches and episode matches if ep is not 0, or if item.tvInfo.sub matches ep
           perfectMatch = item;
           break;
         }
