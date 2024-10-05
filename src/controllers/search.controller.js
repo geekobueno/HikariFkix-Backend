@@ -28,20 +28,20 @@ export const search = async (req, res) => {
       for (const item of data) {
         const normalizedTitle = normalizeString(item.title);
         // Check for a perfect match
-        if (normalizedTitle === keyword && item.tvInfo.eps === ep) { // Check if both title and episode match
+        if (normalizedTitle === keyword && (ep === '0' || item.tvInfo.eps === ep)) { // Check if both title matches and episode matches if ep is not 0
           perfectMatch = item;
           break;
         }
 
         // Fuzzy matching using Levenshtein distance
         const distance = levenshtein.get(normalizedTitle, keyword);
-        if (distance < closestDistance && item.tvInfo.eps === ep) { // Ensure the episode matches
+        if (distance < closestDistance && (ep === '0' || item.tvInfo.eps === ep)) { // Ensure the episode matches if ep is not 0
           bestMatch = item;
           closestDistance = distance;
         }
 
         // Partial match (includes keyword) and episode match
-        if (!perfectMatch && normalizedTitle.includes(keyword) && item.tvInfo.eps === ep) { // Check for episode match
+        if (!perfectMatch && normalizedTitle.includes(keyword) && (ep === '0' || item.tvInfo.eps === ep)) { // Check for episode match if ep is not 0
           bestMatch = item; // Keep this match as the closest partial match
         }
       }
