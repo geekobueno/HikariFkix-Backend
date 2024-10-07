@@ -16,7 +16,6 @@ export const search = async (req, res) => {
   try {
     const keyword = normalizeString(req.query.keyword.replace(/[{}]/g, '').split('?ep=')[0]); // Normalize the keyword and remove ?ep=74
     const ep = req.query.keyword.split('?ep=')[1].replace(/[{}]/g, ''); // Extract the episode number and remove {}
-
     const totalPages = await countPages(`https://${v1_base_url}/search?keyword=${keyword}`);
 
     let bestMatch = null;
@@ -27,23 +26,28 @@ export const search = async (req, res) => {
       const data = await extractSearchResults(encodeURIComponent(keyword), page);
       for (const item of data) {
         const normalizedTitle = normalizeString(item.title);
+        const normalizedJapaneseTitle = item.japanese_title ? normalizeString(item.japanese_title.replace(/[\u201C\u201D]/g, '')) : null; // Normalize Japanese title and remove weird characters
         // Check for a perfect match
-        if (normalizedTitle === keyword && (ep === '0' || item.tvInfo.eps === ep || item.tvInfo.sub === ep)) { // Check if both title matches and episode matches if ep is not 0, or if item.tvInfo.sub matches ep
+        if (normalizedTitle === keyword && (ep === '0' || item.tvInfo.eps === ep || item.tvInfo.sub === ep) || 
+            (normalizedJapaneseTitle === keyword && (ep === '0' || item.tvInfo.eps === ep || item.tvInfo.sub === ep))) { // Check if title matches first, then Japanese title, and episode matches if ep is not 0
           perfectMatch = item;
           break;
         }
 
         // Fuzzy matching using Levenshtein distance
-        const distance = levenshtein.get(normalizedTitle, keyword);
-        if (distance < closestDistance && (ep === '0' || item.tvInfo.eps === ep)) { // Ensure the episode matches if ep is not 0
-          bestMatch = item;
-          closestDistance = distance;
-        }
+        const distanceTitle = levenshtein.get(normalizedTitle, keyword);
+        const distanceJapaneseTitle = normalizedJapaneseTitle ? levenshtein.get(normalizedJapaneseTitle, keyword) : Infinity; // Calculate distance for Japanese title if it exists
 
-        // Partial match (includes keyword) and episode match
-        if (!perfectMatch && normalizedTitle.includes(keyword) && (ep === '0' || item.tvInfo.eps === ep)) { // Check for episode match if ep is not 0
-          bestMatch = item; // Keep this match as the closest partial match
+        // Determine the closest match between title and Japanese title
+        if (distanceTitle < closestDistance && (ep === '0' || item.tvInfo.eps === ep)) { // Check normalized title first
+          bestMatch = item;
+          closestDistance = distanceTitle;
+        } 
+        if (distanceJapaneseTitle < closestDistance && (ep === '0' || item.tvInfo.eps === ep)) { // Check Japanese title if title doesn't match
+          bestMatch = item;
+          closestDistance = distanceJapaneseTitle;
         }
+        
       }
 
       if (perfectMatch) break; // Exit the loop if a perfect match is found
