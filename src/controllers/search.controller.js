@@ -14,7 +14,8 @@ const normalizeString = (str) => {
 
 export const search = async (req, res) => {
   try {
-    let keyword = normalizeString(req.query.keyword.replace(/[{}]/g, '')); // Normalize the keyword
+    const keyword = normalizeString(req.query.keyword.replace(/[{}]/g, '').split('?ep=')[0]); // Normalize the keyword and remove ?ep=74
+    const ep = req.query.keyword.split('?ep=')[1].replace(/[{}]/g, ''); // Extract the episode number and remove {}
 
     const totalPages = await countPages(`https://${v1_base_url}/search?keyword=${keyword}`);
 
@@ -24,25 +25,23 @@ export const search = async (req, res) => {
 
     for (let page = 1; page <= totalPages; page++) {
       const data = await extractSearchResults(encodeURIComponent(keyword), page);
-      
       for (const item of data) {
         const normalizedTitle = normalizeString(item.title);
-
         // Check for a perfect match
-        if (normalizedTitle === keyword) {
+        if (normalizedTitle === keyword && (ep === '0' || item.tvInfo.eps === ep || item.tvInfo.sub === ep)) { // Check if both title matches and episode matches if ep is not 0, or if item.tvInfo.sub matches ep
           perfectMatch = item;
           break;
         }
 
         // Fuzzy matching using Levenshtein distance
         const distance = levenshtein.get(normalizedTitle, keyword);
-        if (distance < closestDistance) {
+        if (distance < closestDistance && (ep === '0' || item.tvInfo.eps === ep)) { // Ensure the episode matches if ep is not 0
           bestMatch = item;
           closestDistance = distance;
         }
 
-        // Partial match (includes keyword)
-        if (!perfectMatch && normalizedTitle.includes(keyword)) {
+        // Partial match (includes keyword) and episode match
+        if (!perfectMatch && normalizedTitle.includes(keyword) && (ep === '0' || item.tvInfo.eps === ep)) { // Check for episode match if ep is not 0
           bestMatch = item; // Keep this match as the closest partial match
         }
       }
