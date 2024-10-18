@@ -15,6 +15,8 @@ import { getBrowseVideos } from "../src/hentai_scrapers/getBrowseVideos.js";
 import * as streamController from "../src/controllers/streamInfo.controller.js";
 import * as searchController from "../src/controllers/search.controller.js";
 import * as episodeListController from "../src/controllers/episodeList.controller.js";
+import * as frenchEpisodeListController from "../src/controllers/frenchEpisodeList.controller.js";
+
 
 dotenv.config()
 
@@ -139,6 +141,14 @@ app.get("/a/stream", async (req, res) => {
 
 app.get("/a/search", cacheMiddleware, async (req, res) => { // Updated endpoint to accept keyword and ep as query parameters
   await searchController.search(req, res);
+});
+
+app.get("/f/episodes/:title", cacheMiddleware, async (req, res) => {
+  await frenchEpisodeListController.getEpisodes(req, res);
+});
+
+app.get("/f/stream/:show/:ep", async (req, res) => {
+  await streamController.getStreamInfo(req, res);
 });
 
 app.get("*", handle404);
