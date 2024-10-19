@@ -51,7 +51,7 @@ async function extractEpisodesList(title) {
                     // Navigate to the anime page with an increased timeout
           await page.goto(`https://${url}/${title}/${anime.url}`, {
             waitUntil: 'networkidle2',
-            timeout: 100000, // Increase timeout to 60 seconds
+            timeout: 60000, // Increase timeout to 60 seconds
           });
     
           // Wait for the select tag with id selectEpisodes to appear
