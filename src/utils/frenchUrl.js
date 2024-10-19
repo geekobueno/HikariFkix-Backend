@@ -1,0 +1,1 @@
+export const url = "anime-sama.fr/catalogue/";
