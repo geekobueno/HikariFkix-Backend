@@ -1,9 +1,8 @@
 import frenchStreamExtractor from '../extractors/frenchStream.extractor.js';
 
 export async function getStreamingUrl(req, res) {
-  const { showUrl} = req.query.url;
-  const {episodeNumber} = req.query.ep;
-
+  const { url } = req.query;
+  const [showUrl, episodeNumber] = url.split('?ep=');
   try {
     const VO = await frenchStreamExtractor.extractVO(showUrl, episodeNumber);
     const VF = await frenchStreamExtractor.extractVF(showUrl, episodeNumber);

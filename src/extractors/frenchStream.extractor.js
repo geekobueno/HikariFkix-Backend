@@ -9,6 +9,7 @@ async function launchBrowser() {
 
   return puppeteer.launch({
     args: chromium.args,
+    args: [ '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--single-process' ],
     executablePath: executablePath,
     headless: true,
     defaultViewport: chromium.defaultViewport,
@@ -22,7 +23,7 @@ async function extractVO(showUrl, episodeNumber) {
   try {
     await page.goto(`https://${url}/${showUrl}`, {
       waitUntil: 'networkidle2',
-      timeout: 60000,
+      timeout: 1000000,
     });
 
     await page.waitForSelector('#selectEpisodes');
@@ -37,7 +38,7 @@ async function extractVO(showUrl, episodeNumber) {
     await browser.close();
     return VO;
   } catch (error) {
-    console.error(`Error getting VO streaming URL for ${showUrl}, episode ${episodeNumber}:`, error.message);
+    console.error(`Error getting VO streaming URL for https://${url}/${showUrl}, episode ${episodeNumber}:`, error.message);
     await browser.close();
     throw error;
   }
@@ -47,12 +48,12 @@ async function extractVO(showUrl, episodeNumber) {
 async function extractVF(showUrl, episodeNumber) {
   const browser = await launchBrowser();
   const page = await browser.newPage();
-  const url = showUrl.replace('/vostfr', '/vf');
+  const finalUrl = showUrl.replace('/vostfr', '/vf');
 
   try {
-    await page.goto(`https://${url}/${url}`, {
+    await page.goto(`https://${url}/${finalUrl}`, {
       waitUntil: 'networkidle2',
-      timeout: 60000,
+      timeout: 1000000,
     });
 
     await page.waitForSelector('#selectEpisodes');

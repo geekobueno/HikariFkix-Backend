@@ -17,6 +17,7 @@ import * as searchController from "../src/controllers/search.controller.js";
 import * as episodeListController from "../src/controllers/episodeList.controller.js";
 import * as frenchEpisodeListController from "../src/controllers/frenchEpisodeList.controller.js";
 import * as frenchStreamController from "../src/controllers/frenchStream.controller.js";
+import * as frenchSearchController from "../src/controllers/frenchSearch.controller.js";
 
 
 dotenv.config()
@@ -142,6 +143,10 @@ app.get("/a/stream", async (req, res) => {
 
 app.get("/a/search", cacheMiddleware, async (req, res) => { // Updated endpoint to accept keyword and ep as query parameters
   await searchController.search(req, res);
+});
+
+app.get("/f/search", cacheMiddleware, async (req, res) => { // Updated endpoint to accept keyword and ep as query parameters
+  await frenchSearchController.search(req, res);
 });
 
 app.get("/f/episodes/:title", cacheMiddleware, async (req, res) => {

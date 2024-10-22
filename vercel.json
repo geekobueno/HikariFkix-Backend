@@ -5,13 +5,14 @@
       "src": "api/server.js",
       "use": "@vercel/node",
       "config": {
-        "maxDuration": 30
+        "maxDuration": 60
       }
     }
   ],
   "routes": [
     { "src": "/a/(.*)", "dest": "/api/server.js" },
     { "src": "/h/(.*)", "dest": "/api/server.js" },
+    { "src": "/f/(.*)", "dest": "/api/server.js" },
     { "src": "/", "dest": "/api/server.js" }
   ]
 }
