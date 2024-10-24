@@ -15,7 +15,6 @@ const extractSearch = async (query) => {
                     'Accept': '*/*',
                 },
             });
-
         // Load the HTML response into cheerio for parsing
         const $ = cheerio.load(response.data);
 

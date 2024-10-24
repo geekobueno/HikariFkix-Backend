@@ -1,13 +1,10 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-import { url } from "../utils/frenchUrl.js";
-import puppeteer from 'puppeteer-core';
-import chromium from 'chrome-aws-lambda';
 
-async function extractEpisodesList(title) {
+async function extractEpisodesList(link) {
   try {
     // Fetch the HTML from the URL
-    const response = await axios.get(`https://${url}/${title}`);
+    const response = await axios.get(link);
     const $ = cheerio.load(response.data);
 
     // Find the specific div
@@ -30,54 +27,38 @@ async function extractEpisodesList(title) {
         }
       }
 
-      // Launch Puppeteer using chrome-aws-lambda for Vercel and puppeteer for local
-    const executablePath = process.env.AWS_LAMBDA_FUNCTION_VERSION
-    ? await chromium.executablePath // Use chrome-aws-lambda on Vercel
-    : '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'; // Use local Chrome/Chromium executable for development
-
-  const browser = await puppeteer.launch({
-    args: chromium.args,
-    args: [ '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--single-process' ],
-    executablePath: executablePath,
-    headless: true, // Ensure headless mode
-    defaultViewport: chromium.defaultViewport,
-  });
-
-  const page = await browser.newPage();
-
-      
       for (let anime of animeList) {
-        try {
-                    // Navigate to the anime page with an increased timeout
-          await page.goto(`https://${url}/${title}/${anime.url}`, {
-            waitUntil: 'networkidle2',
-            timeout: 60000, // Increase timeout to 60 seconds
-          });
-    
-          // Wait for the select tag with id selectEpisodes to appear
-          await page.waitForSelector('#selectEpisodes');
-    
-          // Extract the episode options from the select dropdown
-          const episodes = await page.$$eval('#selectEpisodes option', options =>
-            options.map(option => option.textContent.trim())
-          );
-    
-          // Loop through each episode and get the iframe src
-          for (const episode of episodes) {
-            // Select the episode
-            await page.select('#selectEpisodes', episode);
-    
-            anime.episodes.push({ episode});
-          }
-    
-        } catch (error) {
-          console.error(`Error navigating to ${anime.url}:`, error.message);
-        }
+        const query = `${link}/${anime.url}/episodes.js?filever=2548`
+        const response = await axios.get(query);
+
+       // The response is in text format, so we need to extract the arrays
+      const textData = response.data;
+
+      // Regular expressions to extract eps1, eps2, and epsAS arrays from text
+      const eps1Match = textData.match(/var\s+eps1\s*=\s*(\[.*?\]);/s);
+      const eps2Match = textData.match(/var\s+eps2\s*=\s*(\[.*?\]);/s);
+      const epsASMatch = textData.match(/var\s+epsAS\s*=\s*(\[.*?\]);/s);
+
+      // Use eval or JSON.parse if safe (assuming the content is trusted)
+      const eps1 = eps1Match ? eval(eps1Match[1]) : [];
+      const eps2 = eps2Match ? eval(eps2Match[1]) : [];
+      const epsAS = epsASMatch ? eval(epsASMatch[1]) : [];
+
+      // Map each array of sources (eps1, eps2, epsAS) to the same episode
+      for (let i = 0; i < eps1.length; i++) {
+        anime.episodes.push({
+          episode: i + 1,
+          sources: [
+            { source: '1', url: eps1[i] || null },
+            { source: '2', url: eps2[i] || null },
+            { source: '3', url: epsAS[i] || null }
+          ].filter(source => source.url !== null), // Filter out null URLs
+        });
       }
-    
-       // Close the Puppeteer browser
-       await browser.close();
-      return animeList;
+
+      }
+      return animeList
+
     } else {
       console.log('Target div not found.');
       return [];
