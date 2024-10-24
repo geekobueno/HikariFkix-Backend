@@ -1,1 +1,1 @@
-export const url = "anime-sama.fr/catalogue/";
+export const url = "https://anime-sama.fr/catalogue/";
