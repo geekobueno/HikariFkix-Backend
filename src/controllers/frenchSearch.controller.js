@@ -3,7 +3,7 @@ import extractSearch from "../extractors/frenchSearch.extractor.js";
 export const search = async (req, res) => {
     const title = req.query.keyword
     try {
-      const data = await extractSearch(encodeURIComponent(title));
+      const data = await extractSearch(title);
       res.json({ success: true, results: data });
     } catch (e) {
       console.error(e);

@@ -16,8 +16,8 @@ import * as streamController from "../src/controllers/streamInfo.controller.js";
 import * as searchController from "../src/controllers/search.controller.js";
 import * as episodeListController from "../src/controllers/episodeList.controller.js";
 import * as frenchEpisodeListController from "../src/controllers/frenchEpisodeList.controller.js";
-import * as frenchStreamController from "../src/controllers/frenchStream.controller.js";
 import * as frenchSearchController from "../src/controllers/frenchSearch.controller.js";
+import * as frenchStreamController from "../src/controllers/frenchStreamInfo.controller.js";
 
 
 dotenv.config()
@@ -149,12 +149,12 @@ app.get("/f/search", cacheMiddleware, async (req, res) => { // Updated endpoint 
   await frenchSearchController.search(req, res);
 });
 
-app.get("/f/episodes/:title", cacheMiddleware, async (req, res) => {
+app.get("/f/episodes", cacheMiddleware, async (req, res) => {
   await frenchEpisodeListController.getEpisodes(req, res);
 });
 
 app.get("/f/stream", async (req, res) => {
-  await frenchStreamController.getStreamingUrl(req, res);
+  await frenchStreamController.getStream(req, res);
 });
 
 app.get("*", handle404);

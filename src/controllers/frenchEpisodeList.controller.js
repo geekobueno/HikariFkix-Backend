@@ -1,9 +1,9 @@
 import extractEpisodesList from "../extractors/frenchEpisodeList.extractor.js";
 
 export const getEpisodes = async (req, res) => {
-    const title = req.params.title.toLowerCase().split(' ').join('-');
+    const link = req.query.link;
     try {
-      const data = await extractEpisodesList(encodeURIComponent(title));
+      const data = await extractEpisodesList(link);
       res.json({ success: true, results: data });
     } catch (e) {
       console.error(e);
