@@ -2,7 +2,6 @@ import axios from 'axios';
 import * as base from '../utils/frenchUrl.js';
 
 const config = {
-    baseURL: base.url,
     defaultVersion: '2548',
     languages: {
         subbed: 'vostfr',
@@ -37,7 +36,7 @@ function extractEpisodeArrays(content) {
 
 async function fetchLanguageEpisodes(animeUrl, language) {
     try {
-        const query = `${config.baseURL}/${animeUrl}/${language}/episodes.js?filever=${config.defaultVersion}`;
+        const query = `${animeUrl}/${language}/episodes.js?filever=${config.defaultVersion}`;
         const response = await axios.get(query);
         const { eps1, eps2 } = extractEpisodeArrays(response.data);
         
