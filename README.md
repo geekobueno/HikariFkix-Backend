@@ -1,7 +1,15 @@
 # HikariFlix-Backend
 The backend for the HikariFlix project
 
-A web scrapper for hanime.tv and hianime.to
+A web scrapper for:
+
+-hanime.tv 
+
+
+-hianime.to
+
+
+-anime-sama.fr
 
 helped by the work of : https://github.com/itzzzme/anime-api for hianime.to scraping  and https://github.com/Lishan778/hanime-api for hanime.tv
 

@@ -1,5 +1,5 @@
 import NodeCache from 'node-cache';
-import { extractEpisodeLinks } from "../extractors/frenchEpisodeLinks.extractor.js";
+import { extractEpisodeLinks } from "../extractors/animeSamaEpisodeLinks.extractor.js";
 
 // Initialize cache with 1 hour TTL and check every 2 minutes
 const cache = new NodeCache({ stdTTL: 3600, checkperiod: 120 });
