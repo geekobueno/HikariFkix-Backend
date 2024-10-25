@@ -15,9 +15,9 @@ import { getBrowseVideos } from "../src/hentai_scrapers/getBrowseVideos.js";
 import * as streamController from "../src/controllers/streamInfo.controller.js";
 import * as searchController from "../src/controllers/search.controller.js";
 import * as episodeListController from "../src/controllers/episodeList.controller.js";
-import * as frenchEpisodeListController from "../src/controllers/frenchEpisodeList.controller.js";
-import * as frenchSearchController from "../src/controllers/frenchSearch.controller.js";
-import * as frenchStreamController from "../src/controllers/frenchStreamInfo.controller.js";
+import * as frenchEpisodeListController from "../src/controllers/animeSamaEpisodeList.controller.js";
+import * as frenchSearchController from "../src/controllers/animeSamaSearch.controller.js";
+import * as frenchStreamController from "../src/controllers/animeSamaStreamInfo.controller.js";
 
 
 dotenv.config()

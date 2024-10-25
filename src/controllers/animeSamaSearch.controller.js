@@ -1,4 +1,4 @@
-import extractSearch from "../extractors/frenchSearch.extractor.js";
+import extractSearch from "../extractors/animeSamaSearch.extractor.js";
 
 export const search = async (req, res) => {
     const title = req.query.keyword

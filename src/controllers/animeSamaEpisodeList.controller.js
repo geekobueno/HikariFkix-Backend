@@ -1,4 +1,4 @@
-import extractEpisodesList from "../extractors/frenchEpisodeList.extractor.js";
+import extractEpisodesList from "../extractors/animeSamaEpisodeList.extractor.js";
 
 export const getEpisodes = async (req, res) => {
     const link = req.query.link;
