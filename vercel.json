@@ -13,6 +13,7 @@
     { "src": "/a/(.*)", "dest": "/api/server.js" },
     { "src": "/h/(.*)", "dest": "/api/server.js" },
     { "src": "/f/(.*)", "dest": "/api/server.js" },
+    { "src": "/v/(.*)", "dest": "/api/server.js" },
     { "src": "/", "dest": "/api/server.js" }
   ]
 }
