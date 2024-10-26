@@ -12,12 +12,14 @@ import { getTrending } from "../src/hentai_scrapers/getTrending.js";
 import { getVideo } from "../src/hentai_scrapers/getVideo.js";
 import { getBrowse } from "../src/hentai_scrapers/getBrowse.js";
 import { getBrowseVideos } from "../src/hentai_scrapers/getBrowseVideos.js";
-import * as streamController from "../src/controllers/streamInfo.controller.js";
-import * as searchController from "../src/controllers/search.controller.js";
-import * as episodeListController from "../src/controllers/episodeList.controller.js";
-import * as frenchEpisodeListController from "../src/controllers/animeSamaEpisodeList.controller.js";
-import * as frenchSearchController from "../src/controllers/animeSamaSearch.controller.js";
-import * as frenchStreamController from "../src/controllers/animeSamaStreamInfo.controller.js";
+import * as streamController from "../src/controllers/hianime/streamInfo.controller.js";
+import * as searchController from "../src/controllers/hianime/search.controller.js";
+import * as episodeListController from "../src/controllers/hianime/episodeList.controller.js";
+import * as ASEpisodeListController from "../src/controllers/animeSama/animeSamaEpisodeList.controller.js";
+import * as ASSearchController from "../src/controllers/animeSama/animeSamaSearch.controller.js";
+import * as ASStreamController from "../src/controllers/animeSama/animeSamaStreamInfo.controller.js";
+import * as VAEpisodeListController from "../src/controllers/voiranime/voiranimeEpisodeList.controller.js";
+import * as VASearchController from "../src/controllers/voiranime/voiranimeSearch.controller.js";
 
 
 dotenv.config()
@@ -145,16 +147,24 @@ app.get("/a/search", cacheMiddleware, async (req, res) => { // Updated endpoint 
   await searchController.search(req, res);
 });
 
-app.get("/f/search", cacheMiddleware, async (req, res) => { // Updated endpoint to accept keyword and ep as query parameters
-  await frenchSearchController.search(req, res);
+app.get("/s/search", cacheMiddleware, async (req, res) => { // Updated endpoint to accept keyword and ep as query parameters
+  await ASSearchController.search(req, res);
 });
 
-app.get("/f/episodes", cacheMiddleware, async (req, res) => {
-  await frenchEpisodeListController.getEpisodes(req, res);
+app.get("/s/episodes", cacheMiddleware, async (req, res) => {
+  await ASEpisodeListController.getEpisodes(req, res);
 });
 
-app.get("/f/stream", async (req, res) => {
-  await frenchStreamController.getStream(req, res);
+app.get("/s/stream", async (req, res) => {
+  await ASStreamController.getStream(req, res);
+});
+
+app.get("/v/search", cacheMiddleware, async (req, res) => { // Updated endpoint to accept keyword and ep as query parameters
+  await VASearchController.search(req, res);
+});
+
+app.get("/v/episodes", cacheMiddleware, async (req, res) => {
+  await VAEpisodeListController.getEpisodes(req, res);
 });
 
 app.get("*", handle404);

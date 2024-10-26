@@ -1,14 +1,9 @@
 import NodeCache from 'node-cache';
-import { extractEpisodeLinks } from "../extractors/animeSamaEpisodeLinks.extractor.js";
+import { extractEpisodeLinks } from "../../extractors/animeSama/animeSamaEpisodeLinks.extractor.js";
 
 // Initialize cache with 1 hour TTL and check every 2 minutes
 const cache = new NodeCache({ stdTTL: 3600, checkperiod: 120 });
 
-/**
- * Controller to handle episode links extraction and caching
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- */
 export const getStream = async (req, res) => {
     try {
         // Get the anime URL from query parameters

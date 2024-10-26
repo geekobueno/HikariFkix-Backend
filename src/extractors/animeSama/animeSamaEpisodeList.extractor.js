@@ -2,12 +2,7 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
-/**
- * Extracts list of anime from the provided webpage
- * @param {string} link - The base URL to fetch anime list from
- * @returns {Promise<Array>} Array of anime objects with name and URL
- */
-async function extractAnimeList(link) {
+async function extractEpisodesList(link) {
   try {
     const response = await axios.get(link);
     const $ = cheerio.load(response.data);
@@ -44,4 +39,4 @@ async function extractAnimeList(link) {
   }
 }
 
-export default extractAnimeList;
+export default extractEpisodesList;

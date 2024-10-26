@@ -1,5 +1,4 @@
 import axios from 'axios';
-import * as base from '../utils/base_v3.js';
 
 const config = {
     defaultVersion: '2548',
