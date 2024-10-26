@@ -1,5 +1,5 @@
 import NodeCache from 'node-cache';
-import { extractOtherEpisodes, extractStreamingInfo } from "../extractors/streamInfo.extractor.js";
+import { extractOtherEpisodes, extractStreamingInfo } from "../../extractors/hianime/streamInfo.extractor.js";
 
 const cache = new NodeCache({ stdTTL: 3600, checkperiod: 120 });
 

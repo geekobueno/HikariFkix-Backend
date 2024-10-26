@@ -1,6 +1,6 @@
-import extractSearchResults from "../extractors/search.extractor.js";
-import countPages from "../helper/countPages.helper.js";
-import { v1_base_url } from "../utils/base_v1.js";
+import extractSearchResults from "../../extractors/hianime/search.extractor.js";
+import countPages from "../../helper/countPages.helper.js";
+import { v1_base_url } from "../../utils/base_v1.js";
 import levenshtein from 'fast-levenshtein';
 
 // Helper function to normalize strings (remove diacritics and special characters)

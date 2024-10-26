@@ -1,6 +1,5 @@
 import { decryptSources_v1 } from "./decrypt_v1.decryptor.js";
 import { decryptSources_v2 } from "./decrypt_v2.decryptor.js";
-import { extractSubtitle } from "../../extractors/subtitle.extractor.js";
 
 export async function decryptAllServers(data) {
   const promises = data.map(async (server) => {

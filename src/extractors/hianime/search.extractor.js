@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import formatTitle from "../helper/formatTitle.helper.js";
-import baseUrl from "../utils/baseUrl.js";
+import formatTitle from "../../helper/formatTitle.helper.js";
+import baseUrl from "../../utils/baseUrl.js";
 
 async function extractSearchResults(search, page) {
   try {

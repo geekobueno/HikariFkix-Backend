@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import baseUrl from "../utils/baseUrl.js";
-import { provider } from "../utils/provider.js";
+import baseUrl from "../../utils/baseUrl.js";
+import { provider } from "../../utils/provider.js";
 
 export async function extractSubtitle(id) {
   const resp = await axios.get(`${baseUrl}/ajax/v2/episode/sources/?id=${id}`);
