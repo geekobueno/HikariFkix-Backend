@@ -1,4 +1,6 @@
 import axios from 'axios';
+import * as cheerio from 'cheerio';
+import puppeteer  from 'puppeteer';
 
 const config = {
     defaultVersion: '2548',
@@ -36,6 +38,24 @@ function extractEpisodeArrays(content) {
 async function fetchLanguageEpisodes(animeUrl, language) {
     try {
         const query = `${animeUrl}/${language}/episodes.js?filever=${config.defaultVersion}`;
+        
+        if (query.includes('film')) {
+            const browser = await puppeteer.launch();
+            const page = await browser.newPage();
+            await page.goto(`${animeUrl}/${language}`, { waitUntil: 'networkidle2' });
+            
+            const episodeOptions = await page.$$eval('#selectEpisodes option', options => 
+                options.map((element, index) => ({
+                    value: element.value,
+                    text: element.textContent.trim(),
+                    dataId: element.dataset.id,  // if there's a data-id attribute
+                    index: index
+                }))
+            );
+
+            console.log(episodeOptions);
+            await browser.close();
+        }
         const response = await axios.get(query);
         const { eps1, eps2 } = extractEpisodeArrays(response.data);
         
