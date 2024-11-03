@@ -1,5 +1,4 @@
 import axios from 'axios';
-import puppeteer from 'puppeteer-core';
 
 const config = {
     defaultVersion: '2548',
@@ -7,6 +6,10 @@ const config = {
     languages: {
         subbed: 'vostfr',
         dubbed: 'vf'
+    },
+    chromium: {
+        revision: '1095492', // Latest stable version
+        downloadHost: 'https://storage.googleapis.com/chromium-browser-snapshots'
     }
 };
 
@@ -33,51 +36,104 @@ function extractEpisodeArrays(content) {
     }
 }
 
-async function scrapeFilms(animeUrl, language) {
+async function downloadChromium(puppeteer, targetPath) {
+    console.log('Downloading Chromium...');
+    const browserFetcher = puppeteer.createBrowserFetcher({
+        path: targetPath
+    });
+
     try {
-        const options = {
-            args: ['--no-sandbox', '--disable-setuid-sandbox'],
-            headless: 'new',
-            executablePath: process.env.VERCEL
-                ? await require('chrome-aws-lambda').executablePath
+        const revisionInfo = await browserFetcher.download(config.chromium.revision);
+        console.log(`Chromium downloaded successfully to: ${revisionInfo.executablePath}`);
+        return revisionInfo.executablePath;
+    } catch (error) {
+        console.error('Failed to download Chromium:', error);
+        throw error;
+    }
+}
+
+async function initBrowser() {
+    if (process.env.VERCEL) {
+        // Vercel environment
+        const chromium = await import('@sparticuz/chromium');
+        const puppeteer = await import('puppeteer-core');
+
+        return await puppeteer.launch({
+            args: chromium.args,
+            defaultViewport: chromium.defaultViewport,
+            executablePath: await chromium.executablePath(),
+            headless: "new"
+        });
+    } else {
+        // Local environment with automatic Chromium setup
+        const { mkdir } = await import('fs/promises');
+        const { join } = await import('path');
+        const puppeteer = await import('puppeteer');
+        
+        // Setup Chromium directory
+        const chromiumPath = join(process.cwd(), '.cache', 'chromium');
+        await mkdir(chromiumPath, { recursive: true }).catch(() => {});
+
+        let executablePath;
+        try {
+            // Try to download Chromium if not already present
+            executablePath = await downloadChromium(puppeteer, chromiumPath);
+        } catch (error) {
+            console.warn('Failed to download Chromium, falling back to system installation');
+            executablePath = process.platform === 'win32' 
+                ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
                 : process.platform === 'darwin'
                     ? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
-                    : process.platform === 'win32'
-                        ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
-                        : '/usr/bin/google-chrome'
-        };
+                    : '/usr/bin/google-chrome';
+        }
 
-        const browser = await puppeteer.launch(options);
+        return await puppeteer.launch({
+            headless: "new",
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+            executablePath
+        });
+    }
+}
+
+async function scrapeFilms(animeUrl, language) {
+    let browser = null;
+    
+    try {
+        browser = await initBrowser();
         const page = await browser.newPage();
         await page.setViewport({ width: 1280, height: 800 });
 
+        console.log(`Navigating to: ${animeUrl}/${language}`);
+
         await page.goto(`${animeUrl}/${language}`, {
             waitUntil: 'networkidle2',
-            timeout: 30000
+            timeout: 30000 
         });
 
         const films = await page.$$eval('#selectEpisodes option', options =>
             options.map(element => ({
-                text: element.textContent.trim()
+                text: element.textContent?.trim() || ''
             }))
         );
 
-        await browser.close();
         return films;
-
     } catch (error) {
-        console.error('Film scraping error:', error.message);
+        console.error('Film scraping error:', error);
+        return [];
+    } finally {
+        if (browser) {
+            await browser.close();
+        }
     }
 }
 
 async function fetchLanguageEpisodes(animeUrl, language) {
     try {
-        let films
+        let films = [];
         if (animeUrl.includes('film')) {
-             films = await scrapeFilms(animeUrl, language);
+            films = await scrapeFilms(animeUrl, language);
         }
 
-        // Regular episode handling
         const query = `${animeUrl}/${language}/episodes.js?filever=${config.defaultVersion}`;
         const response = await axios.get(query);
         const { eps1, eps2 } = extractEpisodeArrays(response.data);
@@ -88,7 +144,7 @@ async function fetchLanguageEpisodes(animeUrl, language) {
             
         const eps2Array = eps2.slice(1, -1).split(',')
             .map(item => item.trim())
-            .filter(item => item && item !== "''");
+            .filter(item => item !== "''");
 
         const maxLength = Math.max(eps1Array.length, eps2Array.length);
         const episodes = [];
@@ -99,14 +155,14 @@ async function fetchLanguageEpisodes(animeUrl, language) {
                 sources.push({
                     source: '1',
                     url: eps1Array[i].replace(/['"]/g, ''),
-                    name: films[i].text
+                    ...(films.length > 0 && { name: films[i].text })
                 });
             }
             if (eps2Array[i]) {
                 sources.push({
                     source: '2',
                     url: eps2Array[i].replace(/['"]/g, ''),
-                    name: films[i].text
+                    ...(films.length > 0 && { name: films[i].text })
                 });
             }
             episodes.push(sources);

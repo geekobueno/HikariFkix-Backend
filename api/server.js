@@ -20,6 +20,8 @@ import * as ASSearchController from "../src/controllers/animeSama/animeSamaSearc
 import * as ASStreamController from "../src/controllers/animeSama/animeSamaStreamInfo.controller.js";
 import * as VAEpisodeListController from "../src/controllers/voiranime/voiranimeEpisodeList.controller.js";
 import * as VASearchController from "../src/controllers/voiranime/voiranimeSearch.controller.js";
+import * as VAStreamController from "../src/controllers/voiranime/voiranimeStream.controller.js";
+
 
 
 dotenv.config()
@@ -165,6 +167,10 @@ app.get("/v/search", cacheMiddleware, async (req, res) => { // Updated endpoint 
 
 app.get("/v/episodes", cacheMiddleware, async (req, res) => {
   await VAEpisodeListController.getEpisodes(req, res);
+});
+
+app.get("/v/stream", cacheMiddleware, async (req, res) => {
+  await VAStreamController.getCaptcha(req, res);
 });
 
 app.get("*", handle404);
