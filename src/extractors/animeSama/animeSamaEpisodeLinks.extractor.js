@@ -28,7 +28,7 @@ async function initBrowser() {
     try {
         if (process.env.VERCEL) {
             // Use puppeteer-core for Vercel
-            const puppeteerCore = require('puppeteer-core');
+            const { default: puppeteerCore } = await import('puppeteer-core');
             const options = {
                 args: [...chromium.args, ...config.chromium.args],
                 defaultViewport: chromium.defaultViewport,
@@ -50,7 +50,8 @@ async function initBrowser() {
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
                     '--disable-dev-shm-usage',
-                    '--disable-gpu'
+                    '--disable-gpu',
+                    '--disable-features=ChromeBrowserCloudManagement'
                 ],
                 // Increase timeout for browser launch
                 timeout: 30000,
@@ -87,7 +88,7 @@ async function scrapeFilms(animeUrl, language) {
         
         await page.goto(url, {
             waitUntil: 'networkidle2',
-            timeout: 30000
+            timeout: 60000
         });
         
         console.log('Checking page content...');
@@ -214,8 +215,6 @@ async function fetchLanguageEpisodes(animeUrl, language, retryCount = 3) {
         }
     }
 }
-
-// Rest of your code remains the same...
 
 // Extract episode links for subbed and dubbed versions
 export async function extractEpisodeLinks(animeUrl) {
