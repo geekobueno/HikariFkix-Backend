@@ -170,7 +170,7 @@ app.get("/v/episodes", cacheMiddleware, async (req, res) => {
 });
 
 app.get("/v/stream", cacheMiddleware, async (req, res) => {
-  await VAStreamController.getCaptcha(req, res);
+  await VAStreamController.handleCaptcha(req, res);
 });
 
 app.get("*", handle404);
