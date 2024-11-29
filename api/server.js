@@ -21,6 +21,7 @@ import * as ASStreamController from "../src/controllers/animeSama/animeSamaStrea
 import * as VAEpisodeListController from "../src/controllers/voiranime/voiranimeEpisodeList.controller.js";
 import * as VASearchController from "../src/controllers/voiranime/voiranimeSearch.controller.js";
 import * as VAStreamController from "../src/controllers/voiranime/voiranimeStream.controller.js";
+import * as versionChecker from "../src/version/versionChecker.js";
 
 
 
@@ -144,7 +145,6 @@ app.get("/a/episodes/:id", cacheMiddleware, async (req, res) => {
 app.get("/a/stream", async (req, res) => {
   await streamController.getStreamInfo(req, res);
 });
-
 app.get("/a/search", cacheMiddleware, async (req, res) => { // Updated endpoint to accept keyword and ep as query parameters
   await searchController.search(req, res);
 });
@@ -171,6 +171,10 @@ app.get("/v/episodes", cacheMiddleware, async (req, res) => {
 
 app.get("/v/stream", cacheMiddleware, async (req, res) => {
   await VAStreamController.handleCaptcha(req, res);
+});
+
+app.get("/c", cacheMiddleware, async (req, res) => {
+  await versionChecker.check(req, res);
 });
 
 app.get("*", handle404);
