@@ -18,6 +18,7 @@
     { "src": "/h/(.*)", "dest": "/api/server.js" },
     { "src": "/s/(.*)", "dest": "/api/server.js" },
     { "src": "/v/(.*)", "dest": "/api/server.js" },
+    { "src": "/c", "dest": "/api/server.js" },
     { "src": "/", "dest": "/api/server.js" }
   ]
 }
