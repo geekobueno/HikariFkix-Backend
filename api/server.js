@@ -21,8 +21,7 @@ import * as ASStreamController from "../src/controllers/animeSama/animeSamaStrea
 import * as VAEpisodeListController from "../src/controllers/voiranime/voiranimeEpisodeList.controller.js";
 import * as VASearchController from "../src/controllers/voiranime/voiranimeSearch.controller.js";
 import * as VAStreamController from "../src/controllers/voiranime/voiranimeStream.controller.js";
-import * as versionChecker from "../src/version/versionChecker.js";
-
+import * as versionChecker from "../src/frontendVersion/versionChecker.js";
 
 
 dotenv.config()
