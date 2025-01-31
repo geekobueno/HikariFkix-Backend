@@ -28,7 +28,6 @@ The backend currently scrapes streaming links from:
 
 - **Framework**: Node.js REST API
 - **Deployment**: Vercel
-- **API Integration**: AniList GraphQL API
 - **Primary Function**: Streaming link aggregation and delivery
 
 ## Acknowledgments
