@@ -1,45 +1,69 @@
-# HikariFlix-Backend
+Here's a refined version of your README that aligns with your planned refactoring:  
 
-A backend service for HikariFlix, a React Native Expo streaming application for Android that integrates with the AniList GraphQL API. This service handles web scraping and provides streaming links through a REST API deployed on Vercel.
+---
 
-## Overview
+# HikariFlix Backend  
 
-HikariFlix-Backend serves as the core streaming link provider for the HikariFlix mobile application. It aggregates content from multiple sources and integrates with AniList for comprehensive anime information.
+The backend for the HikariFlix project, designed to scrape and provide streaming links for anime and hentai content.  
 
-## Features
+## Overview  
 
-### Content Sources
-The backend currently scrapes streaming links from:
-- hianime.to - For anime streaming
-- hanime.tv - For adult content
-- anime-sama.fr - For French content (planned)
+HikariFlix Backend is a web scraper that fetches streaming links from multiple sources and organizes them into a structured API. The backend retrieves anime metadata using the Anilist API and integrates multiple scraping services to provide a seamless experience.  
 
-### Implementation Status
-- ✅ English Anime Streaming
-  - Supports both subbed and dubbed content
-  - Implemented via hianime.to integration
-- ✅ Adult Content Integration
-  - Full support for hanime.tv content
-- 🔄 French Anime Content (in work)
-  - Will support both subbed and dubbed content
-  - Integration with anime-sama.fr in development
+## Supported Sources  
 
-## Architecture
+- **Anime:**  
+  - [hianime.to](https://hianime.to) (English sub/dub)  
+  - [anime-sama.fr](https://anime-sama.fr) (French sub/dub - To be implemented)  
 
-- **Framework**: Node.js REST API
-- **Deployment**: Vercel
-- **Primary Function**: Streaming link aggregation and delivery
+- **Hentai:**  
+  - [hanime.tv](https://hanime.tv)  
 
-## Acknowledgments
+### Acknowledgments  
 
-This project builds upon the work of several open-source contributors:
-- [itzzzme/anime-api](https://github.com/itzzzme/anime-api) - Core functionality for hianime.to scraping
-- [Lishan778/hanime-api](https://github.com/Lishan778/hanime-api) - Integration support for hanime.tv
+This project is inspired by and extends the work of:  
+- [itzzzme/anime-api](https://github.com/itzzzme/anime-api) – Scraping logic for hianime.to  
+- [Lishan778/hanime-api](https://github.com/Lishan778/hanime-api) – Scraping logic for hanime.tv  
 
-## Technical Details
+## Features  
 
-The backend serves as a bridge between the HikariFlix mobile app and various content sources, while leveraging AniList's comprehensive anime database for metadata. All show information is obtained through the AniList API, with this backend focusing on streaming link aggregation.
+✅ **English Anime Scraping (sub/dub)** – Completed  
+✅ **Hentai Videos Scraping** – Completed  
+🚧 **French Anime Scraping (sub/dub)** – In Progress  
 
-## Legal Notice
+## Refactor Plan  
 
-This project is for educational purposes only. Please be aware of and respect the terms of service and usage rights for all integrated services.
+A major refactor is underway to improve maintainability, scalability, and performance. Key improvements include:  
+- Modular **project structure** with clear separation of concerns  
+- Optimized **middleware** for caching, rate limiting, and error handling  
+- Enhanced **scraper architecture** with a base scraper class and parallel processing  
+- Improved **API design** with versioning and structured responses  
+- Comprehensive **testing strategy** (unit & integration tests)  
+- Strengthened **security** measures (rate limiting, validation, CORS protection)  
+
+For detailed refactor guidelines, check the [Refactoring Guide](docs/RefactoringGuide.pdf).  
+
+## Installation  
+
+```sh
+git clone https://github.com/yourusername/hikariflix-backend.git
+cd hikariflix-backend
+npm install
+```
+
+## Running the Server  
+
+```sh
+npm start
+```
+
+## API Documentation  
+
+Once the refactor is complete, API documentation will be available at:  
+```
+http://localhost:PORT/api-docs
+```
+
+---
+
+This version keeps things clean and aligned with your refactor. Let me know if you want any changes! 🚀
