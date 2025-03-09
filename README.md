@@ -1,7 +1,3 @@
-Here's a refined version of your README that aligns with your planned refactoring:  
-
----
-
 # HikariFlix Backend  
 
 The backend for the HikariFlix project, designed to scrape and provide streaming links for anime and hentai content.  
@@ -63,7 +59,3 @@ Once the refactor is complete, API documentation will be available at:
 ```
 http://localhost:PORT/api-docs
 ```
-
----
-
-This version keeps things clean and aligned with your refactor. Let me know if you want any changes! 🚀
