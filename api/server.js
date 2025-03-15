@@ -27,7 +27,7 @@ import * as versionChecker from "../src/frontendVersion/versionChecker.js";
 dotenv.config()
 
 const app = express();
-const port = process.env.PORT || 6969; 
+const port = process.env.PORT || 6969;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -144,12 +144,8 @@ app.get("/a/episodes/:id", cacheMiddleware, async (req, res) => {
 app.get("/a/stream", async (req, res) => {
   await streamController.getStreamInfo(req, res);
 });
-<<<<<<< HEAD
 
-app.get("/a/search", cacheMiddleware, async (req, res) => {
-=======
 app.get("/a/search", cacheMiddleware, async (req, res) => { // Updated endpoint to accept keyword and ep as query parameters
->>>>>>> e222f07fbf886886f05e06bc227d7ecf9cf6f934
   await searchController.search(req, res);
 });
 
