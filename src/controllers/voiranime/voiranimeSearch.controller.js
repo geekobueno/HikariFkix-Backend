@@ -8,21 +8,25 @@ export const search = async (req, res) => {
       let closestDistanceVO = Infinity; 
       let bestMatchVO = null;
       for (const item of data){
-        const distance = levenshtein.get(item.title, title)
-        if (distance < closestDistanceVO) { // Check normalized title first
-          bestMatchVO = item;
-          closestDistanceVO = distance;
-        } 
+        if (item.title.toLowerCase().includes(title.toLowerCase()) || item.title.toLowerCase().includes(title.toLowerCase().trim())) {
+          const distance = levenshtein.get(item.title, title)
+          if (distance < closestDistanceVO) { // Check normalized title first
+            bestMatchVO = item;
+            closestDistanceVO = distance;
+          } 
+        }
       }
       const data2 = await extractSearchVF(title);
       let closestDistanceVF = Infinity; 
       let bestMatchVF = null;
       for (const item of data2){
-        const distance = levenshtein.get(item.title.replace(/\(VF\)$/, ''), bestMatchVO.title.replace(/\(VF\)$/, ''))
-        if (distance < closestDistanceVF) { // Check normalized title first
-          bestMatchVF = item;
-          closestDistanceVF = distance;
-        } 
+        if (bestMatchVO && item.title.toLowerCase().includes(bestMatchVO.title.toLowerCase().replace(/\(VF\)$/, ''))) {
+          const distance = levenshtein.get(item.title.replace(/\(VF\)$/, ''), bestMatchVO.title.replace(/\(VF\)$/, ''))
+          if (distance < closestDistanceVF) { // Check normalized title first
+            bestMatchVF = item;
+            closestDistanceVF = distance;
+          } 
+        }
       }
       res.json({ success: true, results: { VO: bestMatchVO, VF: bestMatchVF } });
     } catch (e) {

@@ -5,7 +5,11 @@
       "src": "api/server.js",
       "use": "@vercel/node",
       "config": {
-        "maxDuration": 60
+        "maxDuration": 60,
+        "memory": 3008,
+        "includeFiles": [
+          "node_modules/@sparticuz/chromium-min/**"
+        ]
       }
     }
   ],
@@ -14,6 +18,7 @@
     { "src": "/h/(.*)", "dest": "/api/server.js" },
     { "src": "/s/(.*)", "dest": "/api/server.js" },
     { "src": "/v/(.*)", "dest": "/api/server.js" },
+    { "src": "/c", "dest": "/api/server.js" },
     { "src": "/", "dest": "/api/server.js" }
   ]
 }

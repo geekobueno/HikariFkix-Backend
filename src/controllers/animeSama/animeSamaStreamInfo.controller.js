@@ -31,7 +31,7 @@ export const getStream = async (req, res) => {
         const response = await extractEpisodeLinks(animeUrl);
 
         // If no episodes found or invalid response, return appropriate error
-        if (!response?.success || !response?.episodes || response.episodes.length === 0) {
+        if (!response?.success) {
             return res.status(404).json({
                 success: false,
                 error: "No episodes found for this anime"

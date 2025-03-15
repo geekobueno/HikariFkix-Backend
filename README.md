@@ -1,27 +1,45 @@
 # HikariFlix-Backend
-The backend for the HikariFlix project
 
-A web scrapper for:
+A backend service for HikariFlix, a React Native Expo streaming application for Android that integrates with the AniList GraphQL API. This service handles web scraping and provides streaming links through a REST API deployed on Vercel.
 
--hanime.tv 
+## Overview
 
+HikariFlix-Backend serves as the core streaming link provider for the HikariFlix mobile application. It aggregates content from multiple sources and integrates with AniList for comprehensive anime information.
 
--hianime.to
+## Features
 
+### Content Sources
+The backend currently scrapes streaming links from:
+- hianime.to - For anime streaming
+- hanime.tv - For adult content
+- anime-sama.fr - For French content (planned)
 
--anime-sama.fr
+### Implementation Status
+- ✅ English Anime Streaming
+  - Supports both subbed and dubbed content
+  - Implemented via hianime.to integration
+- ✅ Adult Content Integration
+  - Full support for hanime.tv content
+- 🔄 French Anime Content (in work)
+  - Will support both subbed and dubbed content
+  - Integration with anime-sama.fr in development
 
-helped by the work of : https://github.com/itzzzme/anime-api for hianime.to scraping  and https://github.com/Lishan778/hanime-api for hanime.tv
+## Architecture
 
-all the info about the shows are obtained  with the anilist api
+- **Framework**: Node.js REST API
+- **Deployment**: Vercel
+- **Primary Function**: Streaming link aggregation and delivery
 
-the backend is for streaming links
+## Acknowledgments
 
+This project builds upon the work of several open-source contributors:
+- [itzzzme/anime-api](https://github.com/itzzzme/anime-api) - Core functionality for hianime.to scraping
+- [Lishan778/hanime-api](https://github.com/Lishan778/hanime-api) - Integration support for hanime.tv
 
-WORK :
+## Technical Details
 
--English anime scraping (sub/dub) : done✅ 
+The backend serves as a bridge between the HikariFlix mobile app and various content sources, while leveraging AniList's comprehensive anime database for metadata. All show information is obtained through the AniList API, with this backend focusing on streaming link aggregation.
 
--Hentai videos scraping : done✅
+## Legal Notice
 
--French anime scraping (sub/dub) : to be done
+This project is for educational purposes only. Please be aware of and respect the terms of service and usage rights for all integrated services.
