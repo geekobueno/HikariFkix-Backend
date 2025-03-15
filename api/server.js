@@ -143,11 +143,11 @@ app.get("/a/stream", async (req, res) => {
   await streamController.getStreamInfo(req, res);
 });
 
-app.get("/a/search", cacheMiddleware, async (req, res) => { // Updated endpoint to accept keyword and ep as query parameters
+app.get("/a/search", cacheMiddleware, async (req, res) => {
   await searchController.search(req, res);
 });
 
-app.get("/s/search", cacheMiddleware, async (req, res) => { // Updated endpoint to accept keyword and ep as query parameters
+app.get("/s/search", cacheMiddleware, async (req, res) => {
   await ASSearchController.search(req, res);
 });
 
@@ -159,7 +159,7 @@ app.get("/s/stream", async (req, res) => {
   await ASStreamController.getStream(req, res);
 });
 
-app.get("/v/search", cacheMiddleware, async (req, res) => { // Updated endpoint to accept keyword and ep as query parameters
+app.get("/v/search", cacheMiddleware, async (req, res) => {
   await VASearchController.search(req, res);
 });
 
