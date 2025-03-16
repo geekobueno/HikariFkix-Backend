@@ -1,4 +1,4 @@
-import extractEpisodesList from "../../extractors/hianime/episodeList.extractor.js";
+import extractEpisodesList from "../../../../services/scrapers/HiAnime/episodeList.extractor";
 
 export const getEpisodes = async (req, res) => {
   const id = req.params.id;

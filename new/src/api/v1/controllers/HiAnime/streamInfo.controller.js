@@ -1,16 +1,14 @@
-import NodeCache from 'node-cache';
-import { extractOtherEpisodes, extractStreamingInfo } from "../../extractors/hianime/streamInfo.extractor.js";
-
-const cache = new NodeCache({ stdTTL: 3600, checkperiod: 120 });
+import { ApiResponse } from "../../../../models/response.model.js";
+import { NotFoundError } from "../../../../utils/error.util.js";
+import {
+  extractOtherEpisodes,
+  extractStreamingInfo,
+} from "../../../../services/scrapers/HiAnime/streamInfo.extractor";
 
 export const getStreamInfo = async (req, res) => {
   try {
-    const input = req.query.id;
-    const cacheKey = `streamInfo-${input}`;
-    const cachedData = cache.get(cacheKey);
-    if (cachedData) {
-      return res.json({ success: true, results: cachedData });
-    }
+    const input = req.params.id;
+
     const match = input.match(/ep=(\d+)/);
     if (!match) {
       throw new Error("Invalid URL format");
@@ -21,8 +19,11 @@ export const getStreamInfo = async (req, res) => {
       extractStreamingInfo(finalId),
     ]);
     const results = { streamingInfo, episodes };
-    cache.set(cacheKey, results);
-    res.json({ success: true, results });
+    if (results) {
+      res.json(ApiResponse.success(results));
+    } else {
+      throw new NotFoundError(`Stream info not found for ${input}`);
+    }
   } catch (e) {
     console.error(e);
     res.status(500).json({ success: false, error: "Internal Server Error" });
