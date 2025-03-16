@@ -1,17 +1,11 @@
-import extractSearchResults from "../../extractors/hianime/search.extractor.js";
+import extractSearchResults from "../../../../services/scrapers/HiAnime/search.extractor.js";
 import { ApiResponse } from "../../../../models/response.model.js";
-import countPages from "../../helper/countPages.helper.js";
-import { v1_base_url } from "../../utils/base_v1.js";
+import countPages from "../../../../utils/countPages.util.js";
+import { v1_base_url } from "../../../../utils/base_v1.js";
 import levenshtein from 'fast-levenshtein';
+import { NotFoundError } from "../../../../utils/error.util.js";
+import normalizeString from "../../../../utils/stringNormalizer.util.js"
 
-// Helper function to normalize strings (remove diacritics and special characters)
-const normalizeString = (str) => {
-  return str
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "") // Remove diacritics
-    .toLowerCase()
-    .trim();
-};
 
 export const search = async (req, res) => {
   try {
@@ -55,9 +49,9 @@ export const search = async (req, res) => {
     }
 
     if (perfectMatch) {
-      res.json({ success: true, result: perfectMatch }); // Return the perfect match found
+      res.json(ApiResponse.success(perfectMatch)); // Return the perfect match found
     } else if (bestMatch) {
-      res.json({ success: true, result: bestMatch }); // Return the closest match found
+      res.json(ApiResponse.success(bestMatch)); // Return the closest match found
     } else {
       res.json({ success: false, message: "No matches found." }); // Handle case where no matches are found
     }
