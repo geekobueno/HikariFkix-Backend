@@ -11,7 +11,6 @@ class CacheService {
     this.ttlMap = {
       search: 3600, // 1 hour for search results
       episodeList: 86400, // 24 hours for episode lists
-      trending: 7200, // 2 hours for trending content
       video: 43200, // 12 hours for video metadata
     };
   }
