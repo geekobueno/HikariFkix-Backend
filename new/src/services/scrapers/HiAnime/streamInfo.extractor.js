@@ -1,10 +1,9 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import baseUrl from "../../utils/baseUrl.js";
-import formatTitle from "../../helper/formatTitle.helper.js";
-import { fetchServerData_v2 } from "../../parsers/idFetch_v2.parser.js";
-import { fetchServerData_v1 } from "../../parsers/idFetch_v1.parser.js";
-import { decryptAllServers } from "../../parsers/decryptors/decryptAllServers.decryptor.js";
+import baseUrl from "../../../../../old/src/utils/baseUrl.js";
+import { fetchServerData_v1 } from "../../../utils/parsers/idFetch_v1.parser.js";
+import { fetchServerData_v2 } from "../../../utils/parsers/idFetch_v2.parser.js";
+import { decryptAllServers } from "../../../utils/parsers/decryptors/decryptAllServers.decryptor.js";
 
 async function extractOtherEpisodes(id) {
   try {

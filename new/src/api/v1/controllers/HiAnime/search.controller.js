@@ -1,7 +1,7 @@
 import extractSearchResults from "../../../../services/scrapers/HiAnime/search.extractor.js";
 import { ApiResponse } from "../../../../models/response.model.js";
-import countPages from "../../../../utils/countPages.util.js";
-import { v1_base_url } from "../../../../utils/base_v1.js";
+import countPages from "../../../../utils/helpers/countPages.util.js";
+import { v1_base_url } from "../../../../utils/url/base_v1.js";
 import levenshtein from "fast-levenshtein";
 import { NotFoundError } from "../../../../utils/error.util.js";
 import normalizeString from "../../../../utils/stringNormalizer.util.js";
