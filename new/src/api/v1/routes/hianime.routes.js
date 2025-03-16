@@ -17,7 +17,7 @@ router.get("/search", cacheMiddleware("search"), searchController.search);
 
 router.get(
   "/stream/:id",
-  cacheMiddleware,
+  cacheMiddleware("streamInfo"),
   streamController.getStreamInfo
 );
 
