@@ -37,3 +37,5 @@ app.listen(PORT, () => {
 });
 
 //TODO : api response model tunning
+//TODO : rateLimiting
+//TODO : Hanime.tv filter through to find the matching results and adding the throws..

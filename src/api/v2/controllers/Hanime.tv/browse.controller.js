@@ -9,7 +9,6 @@ export const getBrowse = async (req, res) => {
     const data = await extractBrowseData(type, category, page);
     const nextPage = `/${type}/${category}/${parseInt(page) + 1}`;
     res.json({ results: data, next_page: nextPage });
-    //TODO filter through to find the matching results and adding the throws..
   } catch (error) {
     next(error);
   }
