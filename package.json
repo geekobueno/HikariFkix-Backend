@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon --exec npm start",
-    "start": "node api/server.js"
+    "start": "node src/server.js"
   },
   "repository": {
     "type": "git",
