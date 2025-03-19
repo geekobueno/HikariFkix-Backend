@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/server.js",
+      "src": "src/server.js",
       "use": "@vercel/node",
       "config": {
         "maxDuration": 60,
@@ -14,11 +14,10 @@
     }
   ],
   "routes": [
-    { "src": "/a/(.*)", "dest": "/api/server.js" },
-    { "src": "/h/(.*)", "dest": "/api/server.js" },
-    { "src": "/s/(.*)", "dest": "/api/server.js" },
-    { "src": "/v/(.*)", "dest": "/api/server.js" },
-    { "src": "/c", "dest": "/api/server.js" },
-    { "src": "/", "dest": "/api/server.js" }
+    { "src": "/api/v1/hianime/(.*)", "dest": "/src/server.js" },
+    { "src": "/api/v1/hentai/(.*)", "dest": "/src/server.js" },
+    { "src": "/api/v1/animesama/(.*)", "dest": "/src/server.js" },
+    { "src": "/api/v1", "dest": "/src/server.js" },
+    { "src": "/", "dest": "/src/server.js" }
   ]
 }
